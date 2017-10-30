@@ -31,7 +31,7 @@ before_install:
     - eval "${MATRIX_EVAL}"
     - git submodule update --init plugins
     - git -C plugins submodule update --init python/pybind11 python/share/modules
-    - find . -name ".git*" -exec rm -rf {} \;
+    - find . -name ".git*" -execdir rm -rf {} \;
 
 install:
   - sudo add-apt-repository ppa:beineri/opt-qt551-trusty -y  # Qt-5.5
