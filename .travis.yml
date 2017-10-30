@@ -29,8 +29,9 @@ git:
 
 before_install:
     - eval "${MATRIX_EVAL}"
-    - sed -i 's/git@github.com:/https:\/\/github.com\//' .gitmodules
-    - git submodule update --init --recursive
+    - git submodule update --init plugins
+    - git -C plugins submodule update --init python/pybind11 python/share/modules
+    - find . -name ".git*" -exec rm -rf {} \;
 
 install:
   - sudo add-apt-repository ppa:beineri/opt-qt551-trusty -y  # Qt-5.5
@@ -53,3 +54,14 @@ notifications:
       - "chat.freenode.net#albertlauncher"
     on_success: always # default: always
     on_failure: always # default: always
+    
+jobs:
+  include:
+    - stage: GitHub Release
+      script: echo "Deploying to GitHub releases ..."
+      deploy:
+        provider: releases
+        api_key: ${GITHUB_TOKEN}
+        skip_cleanup: true
+        on:
+          tags: true
